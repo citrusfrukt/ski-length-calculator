@@ -3,22 +3,21 @@
   <div class="skiCalculator__divider"></div>
   <div class="skiCalculator__formControl">
     <label>Ålder</label>
-    <input type="text">
+    <input type="number" min="0" [(ngModel)]="age">
   </div>
   <div class="skiCalculator__formControl">
     <label>Längd</label>
-    <input type="text">
+    <input type="number" min="1" [(ngModel)]="length">
+  </div>
+  <div class="skiCalculator__formControl">
+    <label>Skidtyp</label>
+    <select [(ngModel)]="selectedDiscipline">
+      <option *ngFor="let discipline of disciplines" [ngValue]="discipline">
+        {{getDisciplineDescription(discipline)}}
+      </option>
+    </select>
   </div>
   <div class="skiCalculator__divider"></div>
-  <div class="skiCalculator__cardContainer">
-    <div class="skiCalculator__styleCard">
-      Fristil
-    </div>
-    <div class="skiCalculator__styleCard skiCalculator__styleCard--selected">
-      Klassisk
-    </div>
-  </div>
-
   <div class="skiCalculator__result">
   </div>
 </div>

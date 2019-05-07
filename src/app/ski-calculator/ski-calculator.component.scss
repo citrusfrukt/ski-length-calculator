@@ -17,6 +17,10 @@
         margin: 15px 5px;
     }
 
+    &__label {
+        margin-right: 15px;
+    }
+
     &__cardContainer {
         display: flex;
         justify-content: space-around;
@@ -40,6 +44,6 @@
     }
 }
 
-input {
+input, select {
     width: 100%;
 }
