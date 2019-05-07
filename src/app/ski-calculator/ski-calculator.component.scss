@@ -1,0 +1,45 @@
+.skiCalculator {
+    width: 50%;
+    margin: 0 auto;
+
+    &__title {
+        text-align: center;
+    }
+
+    &__divider {
+        background-color: black;
+        height: 1px;
+        margin: 15px;
+    }
+
+    &__formControl {
+        display: flex;
+        margin: 15px 5px;
+    }
+
+    &__cardContainer {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    &__styleCard {
+        width: 80px;
+        height: 80px;
+        border: 1px solid black;
+    }
+
+    &__styleCard--selected {
+        background-color: lightgray;
+    }
+
+    &__result {
+        margin-top: 25px;
+        border: 1px solid darkgreen;
+        background-color: lightgreen;
+        min-height: 400px;
+    }
+}
+
+input {
+    width: 100%;
+}

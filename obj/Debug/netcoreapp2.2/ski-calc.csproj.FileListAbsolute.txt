@@ -1,0 +1,14 @@
+C:\Dev\ski-calc\bin\Debug\netcoreapp2.2\ski-calc.deps.json
+C:\Dev\ski-calc\bin\Debug\netcoreapp2.2\ski-calc.runtimeconfig.json
+C:\Dev\ski-calc\bin\Debug\netcoreapp2.2\ski-calc.runtimeconfig.dev.json
+C:\Dev\ski-calc\bin\Debug\netcoreapp2.2\ski-calc.dll
+C:\Dev\ski-calc\bin\Debug\netcoreapp2.2\ski-calc.pdb
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.csprojAssemblyReference.cache
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.csproj.CoreCompileInputs.cache
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.RazorAssemblyInfo.cache
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.RazorAssemblyInfo.cs
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.AssemblyInfoInputs.cache
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.AssemblyInfo.cs
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.RazorTargetAssemblyInfo.cache
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.dll
+C:\Dev\ski-calc\obj\Debug\netcoreapp2.2\ski-calc.pdb
