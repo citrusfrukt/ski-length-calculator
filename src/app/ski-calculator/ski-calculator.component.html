@@ -2,12 +2,12 @@
   <h1 class="skiCalculator__title">Skidlängdsberäknare</h1>
   <div class="skiCalculator__divider"></div>
   <div class="skiCalculator__formControl">
-    <label>Ålder</label>
-    <input type="number" min="0" [(ngModel)]="age">
+    <label for="age">Ålder</label>
+    <input id="age" type="number" min="0" [(ngModel)]="age">
   </div>
   <div class="skiCalculator__formControl">
-    <label>Längd</label>
-    <input type="number" min="1" [(ngModel)]="length">
+    <label for="length">Längd</label>
+    <input id="length" type="number" min="1" [(ngModel)]="length">
   </div>
   <div class="skiCalculator__formControl">
     <label>Skidtyp</label>
@@ -18,6 +18,13 @@
     </select>
   </div>
   <div class="skiCalculator__divider"></div>
-  <div class="skiCalculator__result">
+  <div *ngIf="showInfoMessage()" class="skiCalculator__result">
+    <p><strong>{{recommendedMessage}}</strong></p>
+    <p *ngIf="selectedDiscipline === Discipline.FreeStyle">
+      {{minCompetitionLengthMessage}}
+    </p>
+    <p *ngIf="selectedDiscipline === Discipline.Classic && recommendedLength > maxClassicLength">
+      {{notCreatedInRecommendedLengthMessage}}
+    </p>
   </div>
 </div>

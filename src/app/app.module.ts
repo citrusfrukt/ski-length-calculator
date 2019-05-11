@@ -9,7 +9,7 @@ import { SkiCalculatorComponent } from './ski-calculator/ski-calculator.componen
 @NgModule({
   declarations: [
     AppComponent,
-    SkiCalculatorComponent
+    SkiCalculatorComponent,
   ],
   imports: [
     BrowserModule,

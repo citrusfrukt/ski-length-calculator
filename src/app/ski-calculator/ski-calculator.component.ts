@@ -1,5 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { SkicalculatorService } from "../skicalculator.service";
+import { Robustness } from "src/Utilities/Robustness";
+import { EnumHelper } from "src/Utilities/EnumHelper";
 
 export enum Discipline {
   Classic,
@@ -11,36 +13,56 @@ export enum Discipline {
   templateUrl: "./ski-calculator.component.html",
   styleUrls: ["./ski-calculator.component.scss"]
 })
-export class SkiCalculatorComponent implements OnInit {
-  values: Array<string> = [];
-  length: number | null = null;
-  age: number | null = null;
-  selectedDiscipline: Discipline = Discipline.FreeStyle;
-  disciplines = Object.keys(Discipline).map(x => Discipline[x as any]).filter(x => typeof x === "number");
+export class SkiCalculatorComponent {
+  public Discipline = Discipline;
+  public readonly maxClassicLength = 207;
+  public length: number | null = null;
+  public age: number | null = null;
+  public selectedDiscipline: Discipline = Discipline.FreeStyle;
+  public disciplines = EnumHelper.toNumbers(Discipline);
 
   constructor(private readonly service: SkicalculatorService) {
   }
 
-  getDisciplineDescription(disipline: Discipline) {
-    switch (disipline) {
+  getDisciplineDescription(discipline: Discipline) {
+    switch (discipline) {
       case Discipline.Classic:
         return "Fristil 🎿";
       case Discipline.FreeStyle:
         return "Klassisk ⛷";
       default:
-        throw new Error("Shiet bro");
+        throw new Error(`Discipline: ${discipline} not covered in switch`);
     }
   }
 
-  getRecommendedLength(length: number, age: number, discipline: Discipline) {
-
+  showInfoMessage(): boolean {
+    return this.length != null && this.age != null;
   }
 
-  ngOnInit() {
+  get recommendedLength() {
+    const age = Robustness.isNotNull(this.age, "age");
+    const length = Robustness.isNotNull(this.length, "length");
 
+    return this.service.recommendedLength(age, length, this.selectedDiscipline);
   }
 
-  async foo() {
-    this.values = await this.service.getValue();
+  get recommendedMessage() {
+    const recommendedLengthFormatted = typeof this.recommendedLength === "number"
+      ? this.recommendedLength.toString()
+      : `${this.recommendedLength[0]} - ${this.recommendedLength[1]}`;
+
+    return `Rekommenderad skidstorlek: ${recommendedLengthFormatted}`;
+  }
+
+  get minCompetitionLengthMessage() {
+    return `Tänk på att för tävling så får skidans längd inte understiga din kroppslängd med mer än 10cm.`
+  }
+
+  get notCreatedInRecommendedLengthMessage() {
+    return "Dessvärre tillverkas klassiska skidor just nu bara i upp till 207 cm.";
+  }
+
+  getMinimumCompetitionSize(): number {
+    return 1;
   }
 }
