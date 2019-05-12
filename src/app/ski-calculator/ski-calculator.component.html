@@ -1,29 +1,32 @@
 <div class="skiCalculator">
   <h1 class="skiCalculator__title">Skidlängdsberäknare</h1>
   <div class="skiCalculator__divider"></div>
-  <div class="skiCalculator__formControl">
-    <label for="age">Ålder</label>
-    <input id="age" type="number" min="0" [(ngModel)]="age">
-  </div>
-  <div class="skiCalculator__formControl">
-    <label for="length">Längd</label>
-    <input id="length" type="number" min="1" [(ngModel)]="length">
-  </div>
-  <div class="skiCalculator__formControl">
-    <label>Skidtyp</label>
-    <select [(ngModel)]="selectedDiscipline">
-      <option *ngFor="let discipline of disciplines" [ngValue]="discipline">
-        {{getDisciplineDescription(discipline)}}
-      </option>
-    </select>
-  </div>
+  <form [formGroup]="skiLengthForm" (ngSubmit)="calculate()">
+    <div class="skiCalculator__formControl">
+      <label for="age">Ålder</label>
+      <input id="age" type="number" min="0" formControlName="age">
+    </div>
+    <div class="skiCalculator__formControl">
+      <label for="length">Längd</label>
+      <input id="length" type="number" min="1" formControlName="length">
+    </div>
+    <div class="skiCalculator__formControl">
+      <label>Skidtyp</label>
+      <select formControlName="discipline">
+        <option *ngFor="let discipline of disciplines" [ngValue]="discipline">
+          {{getDisciplineDescription(discipline)}}
+        </option>
+      </select>
+    </div>
+    <button [disabled]="!skiLengthForm.valid" type="submit">Beräkna rekommenderad längd</button>
+  </form>
   <div class="skiCalculator__divider"></div>
-  <div *ngIf="showInfoMessage()" class="skiCalculator__result">
-    <p><strong>{{recommendedMessage}}</strong></p>
-    <p *ngIf="selectedDiscipline === Discipline.FreeStyle">
+  <div *ngIf="calculationResult != null" class="skiCalculator__result">
+    <p><strong>{{recommendedMessage(calculationResult[0])}}</strong></p>
+    <p *ngIf="calculationResult[1] === Discipline.FreeStyle">
       {{minCompetitionLengthMessage}}
     </p>
-    <p *ngIf="selectedDiscipline === Discipline.Classic && recommendedLength > maxClassicLength">
+    <p *ngIf="calculationResult[1]  === Discipline.Classic && calculationResult[0] > maxClassicLength">
       {{notCreatedInRecommendedLengthMessage}}
     </p>
   </div>

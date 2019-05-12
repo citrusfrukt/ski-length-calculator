@@ -14,6 +14,7 @@
 
     &__formControl {
         display: flex;
+        flex-direction: column;
         margin: 15px 5px;
     }
 
@@ -40,7 +41,7 @@
         margin-top: 25px;
         border: 1px solid darkgreen;
         background-color: lightgreen;
-        min-height: 400px;
+        padding: 15px;
     }
 }
 

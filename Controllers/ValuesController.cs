@@ -6,40 +6,63 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ski_calc.Controllers
 {
+    public enum SkiDiscipline
+    {
+        Classic = 0,
+        Freestyle = 1,
+    }
+
+    public class CalculateSkiLengthRequest
+    {
+        public int Age { get; set; }
+        public int Length { get; set; }
+        public SkiDiscipline Discipline { get; set; }
+    }
+
+    public class CalculateSkiLengthResult
+    {
+        public int? MinRecommendedLength { get; }
+        public int? MaxRecommendedLength { get; }
+        public SkiDiscipline Discipline { get; }
+        public CalculateSkiLengthResult(int minRecommendedLength, int maxRecommendedLength, SkiDiscipline discipline)
+        {
+            this.MinRecommendedLength = minRecommendedLength;
+            this.MaxRecommendedLength = maxRecommendedLength;
+            this.Discipline = discipline;
+        }
+
+        public CalculateSkiLengthResult(int recommendedLength, SkiDiscipline discipline)
+        {
+            this.MinRecommendedLength = recommendedLength;
+            this.MaxRecommendedLength = recommendedLength;
+            this.Discipline = discipline;
+        }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
+        [Route("calculate")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<CalculateSkiLengthResult> Calculate([FromBody] CalculateSkiLengthRequest request)
         {
-        }
+            if (request.Age <= 4)
+            {
+                return new CalculateSkiLengthResult(request.Length, request.Discipline);
+            }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            if (request.Age <= 8)
+            {
+                return new CalculateSkiLengthResult(request.Length + 10, request.Length + 20, request.Discipline);
+            }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            switch (request.Discipline)
+            {
+                case SkiDiscipline.Classic: return new CalculateSkiLengthResult(request.Length + 20, request.Discipline);
+                case SkiDiscipline.Freestyle: return new CalculateSkiLengthResult(request.Length + 10, request.Length + 15, request.Discipline);
+                default: return BadRequest($"Discipline {request.Discipline} is not covered by the calculator");
+            }
         }
     }
 }

@@ -1,12 +1,7 @@
 import { Component } from "@angular/core";
-import { SkicalculatorService } from "../skicalculator.service";
-import { Robustness } from "src/Utilities/Robustness";
+import { SkiCalculatorWebService, Discipline } from "../skicalculatorwebservice";
 import { EnumHelper } from "src/Utilities/EnumHelper";
-
-export enum Discipline {
-  Classic,
-  FreeStyle,
-}
+import { FormBuilder, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-ski-calculator",
@@ -16,53 +11,53 @@ export enum Discipline {
 export class SkiCalculatorComponent {
   public Discipline = Discipline;
   public readonly maxClassicLength = 207;
-  public length: number | null = null;
-  public age: number | null = null;
-  public selectedDiscipline: Discipline = Discipline.FreeStyle;
   public disciplines = EnumHelper.toNumbers(Discipline);
+  public calculationResult: [number | [number, number], Discipline] | null = null;
 
-  constructor(private readonly service: SkicalculatorService) {
+  public skiLengthForm = this.formBuilder.group({
+    age: ["", [Validators.required, Validators.min(0)]],
+    length: ["", [Validators.required, Validators.min(1)]],
+    discipline: [Discipline.Classic, Validators.required]
+  });
+
+  constructor(
+    private readonly service: SkiCalculatorWebService,
+    private readonly formBuilder: FormBuilder
+  ) { }
+
+  public async calculate() {
+    if (!this.skiLengthForm.valid) {
+      return;
+    }
+
+    this.calculationResult = await this.service.calculate(this.skiLengthForm.value);
+    console.log(this.calculationResult);
   }
 
   getDisciplineDescription(discipline: Discipline) {
     switch (discipline) {
-      case Discipline.Classic:
-        return "Fristil 🎿";
       case Discipline.FreeStyle:
+        return "Fristil 🎿";
+      case Discipline.Classic:
         return "Klassisk ⛷";
       default:
         throw new Error(`Discipline: ${discipline} not covered in switch`);
     }
   }
 
-  showInfoMessage(): boolean {
-    return this.length != null && this.age != null;
-  }
+  public recommendedMessage(recommendedLength: number | [number, number]) {
+    const recommendedLengthFormatted = typeof recommendedLength === "number"
+      ? recommendedLength.toString()
+      : `${recommendedLength[0]} - ${recommendedLength[1]}`;
 
-  get recommendedLength() {
-    const age = Robustness.isNotNull(this.age, "age");
-    const length = Robustness.isNotNull(this.length, "length");
-
-    return this.service.recommendedLength(age, length, this.selectedDiscipline);
-  }
-
-  get recommendedMessage() {
-    const recommendedLengthFormatted = typeof this.recommendedLength === "number"
-      ? this.recommendedLength.toString()
-      : `${this.recommendedLength[0]} - ${this.recommendedLength[1]}`;
-
-    return `Rekommenderad skidstorlek: ${recommendedLengthFormatted}`;
+    return `Rekommenderad skidstorlek: ${recommendedLengthFormatted} cm`;
   }
 
   get minCompetitionLengthMessage() {
-    return `Tänk på att för tävling så får skidans längd inte understiga din kroppslängd med mer än 10cm.`
+    return `Tänk på att för tävling så får skidans längd inte understiga din kroppslängd med mer än 10cm.`;
   }
 
   get notCreatedInRecommendedLengthMessage() {
-    return "Dessvärre tillverkas klassiska skidor just nu bara i upp till 207 cm.";
-  }
-
-  getMinimumCompetitionSize(): number {
-    return 1;
+    return `Dessvärre tillverkas klassiska skidor bara i upp till ${this.maxClassicLength} cm.`;
   }
 }

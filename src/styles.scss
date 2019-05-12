@@ -3,3 +3,7 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+.ng-invalid:not(.ng-untouched) {
+    border-color: red;
+}
